@@ -877,13 +877,19 @@ abstract class Object {
 	 * Add an extra method using raw PHP code passed as a string
 	 *
 	 * @param string $method the method name
-	 * @param string $code the PHP code - arguments will be in an array called $args, while you can access this object
-	 *        by using $obj. Note that you cannot call protected methods, as the method is actually an external
-	 *        function
+	 * @param function|string $function an anonymous function or the PHP code - arguments will be in an array
+	 *        called $args, while you can access this object by using $obj.
+	 *        Note that you cannot call protected methods,
+	 *        as the method is actually an external function.
 	 */
-	protected function createMethod($method, $code) {
+	protected function createMethod($method, $function) {
+		if (!is_callable($function)) {
+			Deprecation::notice('3.2', 'Use anonymous functions instead of code strings');
+			$function = create_function('$obj, $args', $function);
+		}
+
 		self::$extra_methods[$this->class][strtolower($method)] = array (
-			'function' => create_function('$obj, $args', $code)
+			'function' => $function
 		);
 	}
 	

@@ -465,6 +465,9 @@ class ObjectTest_T2 extends Object {
 		$this->addMethodsFrom('failoverArr',1);
 		
 		$this->createMethod('testCreateMethod', 'return "created";');
+		$this->createMethod('anonymousTestCreateMethod', function () {
+			return "created";
+		});
 	}
 	
 	public function wrappedMethod($val) {
